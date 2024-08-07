@@ -8,7 +8,7 @@ export default function Hero() {
         <h1 className="font-semibold text-5xl sm:text-6xl md:text-7xl lg:text-8xl">Fit<span className="text-blue-400">Lab</span></h1>
       </div>
       <p className="text-sm md:text-base font-light">Welcome to FitLab, your ultimate fitness companion. Whether you're a seasoned athlete or just starting your fitness journey, FitLab empowers you to create customized workout routines tailored to your goals. With easy-to-use tools, expert guidance, and a community of fitness enthusiasts, achieving your fitness dreams has never been more accessible. Dive in and start crafting the perfect workout plan today!</p>
-      <button className="px-8 mx-auto py-4 rounded-md border-[2px] bg-slate-950 border-blue-400 border-solid blueShadow duration-200">Get Started</button>
+      <button className="px-8 mx-auto py-4 rounded-md border-2 bg-slate-950 border-blue-400 border-solid blueShadow duration-200">Get Started</button>
     </div>
   )
 }
