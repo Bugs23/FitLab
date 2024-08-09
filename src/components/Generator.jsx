@@ -1,8 +1,38 @@
-import React from 'react'
+import React, {useState} from 'react'
 import SectionWrapper from './SectionWrapper'
-import { WORKOUTS } from '../utils/workoutData'
+import { SCHEMES, WORKOUTS } from '../utils/workoutData'
 
 export default function Generator() {
+
+  const [showModal, setShowModal] = useState(false)
+  const [poison, setPoison] = useState("individual")
+  const [muscles, setMuscles] = useState([])
+  const [goal, setGoal] = useState(["strength_power"])
+
+  function toggleModal() {
+    setShowModal(!showModal)
+  }
+
+  function updateMuscles(muscleGroup) {
+    if (muscles.includes(muscleGroup)) {
+      setMuscles(muscles.filter((muscle) => muscle !== muscleGroup))
+      return
+    }
+
+    if (muscles.length >= 3) {
+      return
+    }
+
+    if (poison !== "individual") {
+      setMuscles([muscleGroup])
+      setShowModal(false)
+      return
+    }
+
+    setMuscles([...muscles, muscleGroup])
+
+    console.log(muscles)
+  }
 
   function Header({index, title, description}) {
     return (
@@ -18,13 +48,68 @@ export default function Generator() {
 
   return (
     <SectionWrapper header={"Create your workout"} title={['It\'s', 'Huge', 'o\'clock']}>
-      <Header index={"01"} title={"Choose your workout"} description={"Select the workout you want to complete"} />
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 px-4">
+      {/* Choose your split */}
+      <Header index={"01"} title={"Choose your split"} description={"Select your workout split"} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 px-4">
         {/* Get the workout type keys from the WORKOUTS object and make buttons for each of them */}
         {Object.keys(WORKOUTS).map((type, typeIndex) => {
           return (
-            <button className="bg-slate-950 border border-blue-400 py-4 rounded-lg duration-200 hover:border-blue-500 capitalize" key={typeIndex}>
+            <button 
+              key={typeIndex}
+              onClick={() => {
+                setMuscles([])
+                setPoison(type)
+              }} 
+              className={`bg-slate-950 border py-4 rounded-lg duration-200 hover:border-blue-600 capitalize ${type === poison ? "border-blue-600" : "border-blue-400"}`}
+            >
               {type.replace("_", " ")}
+            </button>
+          )
+        })}
+      </div>
+      {/* Choose muscles */}
+      <Header index={"02"} title={"Choose muscles"} description={"Select the muscles you want to work"} />
+      <div className="bg-slate-950 border border-solid border-blue-400 rounded-lg flex flex-col mx-4">
+        <button onClick={toggleModal} className="relative flex items-center justify-center p-3">
+          <p className="capitalize">{muscles.length === 0 ? "Select muscle groups" : muscles.join("/")}</p>
+          <i className="fa-solid fa-caret-down absolute right-3 top-1/2 -translate-y-1/2"></i>
+        </button>
+        {showModal && (
+          <div className="flex flex-col px-3 pb-3">
+            {/* 
+              - If the poison chosen is "individual", set the WORKOUTS index to poison (since the "individual" key is already an array)
+              - If the poison chosen isn't "individual" then get an array of the keys in the selected poison so you can map over each key
+            */}
+            {
+              (poison === "individual" ? WORKOUTS[poison] : Object.keys(WORKOUTS[poison])).map((muscleGroup, muscleGroupIndex) => {
+                return (
+                  <button 
+                    key={muscleGroupIndex} 
+                    className={`${muscles.includes(muscleGroup) ? "text-blue-400" : ""} capitalize p-2 cursor-pointer duration-200`}
+                    onClick={() => {updateMuscles(muscleGroup)}}
+                  >
+                    {muscleGroup}
+                  </button>
+                )
+              })
+            }
+          </div> 
+        )}
+      </div>
+      {/* Choose your split */}
+      <Header index={"03"} title={"Choose your split"} description={"Select your workout split"} />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 px-4">
+        {/* Get the workout type keys from the WORKOUTS object and make buttons for each of them */}
+        {Object.keys(SCHEMES).map((scheme, schemeIndex) => {
+          return (
+            <button 
+              key={schemeIndex}
+              onClick={() => {
+                setGoal(scheme)
+              }} 
+              className={`bg-slate-950 border py-4 rounded-lg duration-200 hover:border-blue-600 capitalize ${scheme === goal ? "border-blue-600" : "border-blue-400"}`}
+            >
+              {scheme.replace("_", " ")}
             </button>
           )
         })}
