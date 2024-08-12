@@ -1,13 +1,12 @@
 import React, {useState} from 'react'
 import SectionWrapper from './SectionWrapper'
 import { SCHEMES, WORKOUTS } from '../utils/workoutData'
+import Button from './Button'
+import { generateWorkout } from '../utils/workoutGenerator'
 
-export default function Generator() {
+export default function Generator({poison, setPoison, muscles, setMuscles, goal, setGoal, updateWorkout}) {
 
   const [showModal, setShowModal] = useState(false)
-  const [poison, setPoison] = useState("individual")
-  const [muscles, setMuscles] = useState([])
-  const [goal, setGoal] = useState(["strength_power"])
 
   function toggleModal() {
     setShowModal(!showModal)
@@ -30,8 +29,6 @@ export default function Generator() {
     }
 
     setMuscles([...muscles, muscleGroup])
-
-    console.log(muscles)
   }
 
   function Header({index, title, description}) {
@@ -39,7 +36,7 @@ export default function Generator() {
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-center gap-2">
           <p className="text-3xl sm:text-4xl md:text-5xl font-semibold text-slate-400">{index}</p>
-          <h4 className="text-xl sm:text-2xl md:text-3xl">{title}</h4>
+          <h4 className="capitalize text-xl sm:text-2xl md:text-3xl">{title}</h4>
         </div>
         <p className="text-sm sm:text-base mx-auto">{description}</p>
       </div>
@@ -47,10 +44,10 @@ export default function Generator() {
   }
 
   return (
-    <SectionWrapper header={"Create your workout"} title={['It\'s', 'Huge', 'o\'clock']}>
+    <SectionWrapper sectionId={"generate"} header={"Create your workout"} title={["TRAIN", "SMART"]}>
       {/* Choose your split */}
       <Header index={"01"} title={"Choose your split"} description={"Select your workout split"} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {/* Get the workout type keys from the WORKOUTS object and make buttons for each of them */}
         {Object.keys(WORKOUTS).map((type, typeIndex) => {
           return (
@@ -69,7 +66,7 @@ export default function Generator() {
       </div>
       {/* Choose muscles */}
       <Header index={"02"} title={"Choose muscles"} description={"Select the muscles you want to work"} />
-      <div className="bg-slate-950 border border-solid border-blue-400 rounded-lg flex flex-col mx-4">
+      <div className="bg-slate-950  border border-solid border-blue-400 rounded-lg flex flex-col">
         <button onClick={toggleModal} className="relative flex items-center justify-center p-3">
           <p className="capitalize">{muscles.length === 0 ? "Select muscle groups" : muscles.join("/")}</p>
           <i className="fa-solid fa-caret-down absolute right-3 top-1/2 -translate-y-1/2"></i>
@@ -98,7 +95,7 @@ export default function Generator() {
       </div>
       {/* Choose your split */}
       <Header index={"03"} title={"Choose your split"} description={"Select your workout split"} />
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Get the workout type keys from the WORKOUTS object and make buttons for each of them */}
         {Object.keys(SCHEMES).map((scheme, schemeIndex) => {
           return (
@@ -107,13 +104,14 @@ export default function Generator() {
               onClick={() => {
                 setGoal(scheme)
               }} 
-              className={`bg-slate-950 border py-4 rounded-lg duration-200 hover:border-blue-600 capitalize ${scheme === goal ? "border-blue-600" : "border-blue-400"}`}
+              className={'bg-slate-950 border  duration-200 hover:border-blue-600 py-3 rounded-lg px-4 ' + (scheme === goal ? ' border-blue-600' : ' border-blue-400')}
             >
               {scheme.replace("_", " ")}
             </button>
           )
         })}
       </div>
+      <Button func={updateWorkout} text="Create workout"/>
     </SectionWrapper>
   )
 }
