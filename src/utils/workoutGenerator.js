@@ -2,14 +2,14 @@ import { EXERCISES, SCHEMES, TEMPOS, WORKOUTS } from "./workoutData"
 const exercises = exercisesFlattener(EXERCISES)
 
 export function generateWorkout(args) {
-    const { muscles, poison: workout, goal } = args
+    const { muscles, split: workout, goal } = args
     let exer = Object.keys(exercises);
     exer = exer.filter((key) => exercises[key].meta.environment !== "home");
     let includedTracker = [];
     let numSets = 5;
     let listOfMuscles;
 
-    if (workout === "individual") {
+    if (workout === "individual_muscle") {
         listOfMuscles = muscles;
     } else {
         listOfMuscles = WORKOUTS[workout][muscles[0]];
@@ -20,7 +20,6 @@ export function generateWorkout(args) {
     let scheme = goal
     let sets = SCHEMES[scheme].ratio
         .reduce((acc, curr, index) => {
-            // Make this compound and exercise muscle -> array of objects and destructure in loop
             return [
                 ...acc,
                 ...[...Array(parseInt(curr)).keys()].map((val) =>
@@ -72,7 +71,6 @@ export function generateWorkout(args) {
                 includedTracker.includes(curr) ||
                 !data[curr].muscles.includes(muscleGroup)
             ) {
-                // If (includedTracker.includes(curr)) { console.log('banana', curr) }
                 return acc;
             }
             return { ...acc, [curr]: exercises[curr] };
@@ -89,8 +87,6 @@ export function generateWorkout(args) {
             filteredOppList[
             Math.floor(Math.random() * filteredOppList.length)
             ];
-
-        // console.log(randomExercise)
 
         if (!randomExercise) {
             return {};
@@ -116,7 +112,6 @@ export function generateWorkout(args) {
                 repsOrDuraction = Math.floor(85 / tempoSum);
             }
         } else {
-            // Set to nearest 5 seconds
             repsOrDuraction = Math.ceil(parseInt(repsOrDuraction) / 5) * 5;
         }
         includedTracker.push(randomExercise);
