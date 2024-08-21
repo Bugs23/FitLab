@@ -9,7 +9,7 @@ export function generateWorkout(args) {
     let numSets = 5;
     let listOfMuscles;
 
-    if (workout === "individual_muscle") {
+    if (workout === "individual_muscles") {
         listOfMuscles = muscles;
     } else {
         listOfMuscles = WORKOUTS[workout][muscles[0]];

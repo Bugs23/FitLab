@@ -22,8 +22,8 @@ export default function Generator({ split, setSplit, muscles, setMuscles, goal, 
     if (muscles.length >= 5) {
       return
     }
-
-    if (split !== "individual_muscle") {
+    
+    if (split !== "individual_muscles") {
       setMuscles([muscleGroup])
       setShowModal(false)
       return
@@ -46,7 +46,7 @@ export default function Generator({ split, setSplit, muscles, setMuscles, goal, 
                 setMuscles([])
                 setSplit(type)
               }}
-              className={`text-white py-4 capitalize transition duration-500 ${type === split ? "ring-2 ring-red-800" : "bg-red-600 hover:scale-110"}`}
+              className={`text-white py-3 capitalize transition duration-500 shadow-lg ${type === split ? "ring-2 ring-red-800" : "bg-red-700 hover:scale-105 hover:bg-red-900"}`}
             >
               {type.replaceAll("_", " ")}
             </button>
@@ -55,19 +55,20 @@ export default function Generator({ split, setSplit, muscles, setMuscles, goal, 
       </div>
       {/* Choose muscles */}
       <Header index={"02"} title={"Choose muscles"} description={"Select the muscles you want to work"} />
-      <div className="bg-red-600 text-white flex flex-col">
+      <div className="bg-red-700 text-white flex flex-col">
         <button onClick={toggleModal} className="relative flex items-center justify-center p-3">
-          <span className="capitalize">{muscles.length === 0 ? "Select muscle groups" : muscles.join("/")}</span>
+          <span className="capitalize">
+            {muscles.length === 0 ? "Select muscle groups" : muscles.join("/")}
+            {split === "individual_muscles" && " - Choose up to 5"}
+          </span>
           <i className={`fa-solid fa-caret-down ${showModal && "rotate-180"} absolute right-3 transition`}></i>
         </button>
         {showModal && (
-          <div className="flex flex-col px-3 pb-3 bg-neutral-900">
-            {/* 
-              - If the split chosen is "individual_muscle", set the WORKOUTS index to split (since the "individual_muscle" key is already an array)
-              - If the split chosen isn't "individual_muscle" then get an array of the keys in the selected split so you can map over each key
-            */}
+          <div className="flex flex-col px-3 pb-3 bg-neutral-950 shadow-lg">
+            {/* If the split chosen is "individual_muscles", set the WORKOUTS index to split (since the "individual_muscles" key is already an array) */}
+            {/* If the split chosen isn't "individual_muscles" then get an array of the keys in the selected split so you can map over each key */}
             {
-              (split === "individual_muscle" ? WORKOUTS[split] : Object.keys(WORKOUTS[split])).map((muscleGroup, muscleGroupIndex) => {
+              (split === "individual_muscles" ? WORKOUTS[split] : Object.keys(WORKOUTS[split])).map((muscleGroup, muscleGroupIndex) => {
                 return (
                   <button
                     key={muscleGroupIndex}
@@ -90,24 +91,22 @@ export default function Generator({ split, setSplit, muscles, setMuscles, goal, 
           return (
             <button
               key={schemeIndex}
-              onClick={() => {
-                setGoal(scheme)
-              }}
-              className={`text-white py-4 capitalize transition duration-500 ${scheme === goal ? "ring-2 ring-red-800" : "bg-red-600 hover:scale-110"}`}
-
+              onClick={() => { setGoal(scheme) }}
+              className={`text-white py-3 capitalize transition duration-500 shadow-lg ${scheme === goal ? "ring-2 ring-red-800" : "bg-red-700 hover:scale-105 hover:bg-red-900"}`}
             >
               {scheme === "strength_power" ? scheme.replace("_", " & ") : scheme.replace("_", " ")}
             </button>
           )
         })}
       </div>
-      <Button additionalStyles="mb-8" func={updateWorkout} text="Create workout">
-        {formulating && 
-        <svg className="mr-1 h-5 w-5 animate-spin text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
+      <Button additionalStyles="mb-8 flex items-center" func={updateWorkout}>
+        {formulating &&
+          <svg className="mr-1 h-5 w-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
         }
+        Create workout
       </Button>
     </SectionWrapper>
   )

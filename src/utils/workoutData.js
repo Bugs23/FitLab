@@ -19,7 +19,7 @@ export const SCHEMES = {
 }
 
 export const WORKOUTS = {
-    individual_muscle: ['biceps', 'triceps', 'chest', 'back', 'shoulders', 'quads', 'hamstrings', 'glutes', 'calves', 'abs'],
+    individual_muscles: ['biceps', 'triceps', 'chest', 'back', 'shoulders', 'quads', 'hamstrings', 'glutes', 'calves', 'abs'],
     push_pull_legs: {
         push: ['triceps', 'chest', 'shoulders'],
         pull: ['back', 'shoulders', 'biceps'],
@@ -1228,7 +1228,6 @@ export const EXERCISES = {
         description: 'With a band around your knees, squat to a 60 degree knee bend, and crab walk side to side, then dinosaur walk front to back.',
         substitutes: ['bad girls']
     },
-    //arms lol
     dumbbell_curls: {
         type: 'compound',
         meta: {

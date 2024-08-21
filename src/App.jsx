@@ -1,14 +1,13 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { generateWorkout } from './utils/workoutGenerator'
 import Hero from './components/Hero'
 import Generator from './components/Generator'
 import Workout from './components/Workout'
-import { generateWorkout } from './utils/workoutGenerator'
+import Footer from './components/Footer'
 
 function App() {
   const [workout, setWorkout] = useState(null)
-  const [split, setSplit] = useState("individual_muscle")
+  const [split, setSplit] = useState("individual_muscles")
   const [muscles, setMuscles] = useState([])
   const [goal, setGoal] = useState(["strength_power"])
   const [formulating, setFormulating] = useState(false)
@@ -35,7 +34,7 @@ function App() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col bg-gradient-to-r bg-black text-white text-sm sm:text-base">
+    <main className="min-h-screen flex flex-col bg-gradient-to-r bg-neutral-900 text-white text-sm sm:text-base">
       <Hero />
       <Generator 
         split={split}
@@ -49,6 +48,7 @@ function App() {
       />
       {/* Only render the workout section if workout state exists */}
       {workout && <Workout workout={workout} />}
+      <Footer />
     </main>
   )
 }
